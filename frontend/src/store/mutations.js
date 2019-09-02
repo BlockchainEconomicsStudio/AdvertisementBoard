@@ -34,42 +34,6 @@ export default {
 
     if (payload.callback) payload.callback(state)
   },
-  [MUTATION_TYPES.UPDATE_USER_BLOCKCHAIN_STATUS] (state, payload) {
-    const hasWeb3InjectedBrowser = state.web3.isInjected
-    const hasCoinbase = !!(state.web3.coinbase && state.web3.coinbase !== '')
-    const coinbase = state.web3.coinbase
-    const approvedNetworkId = APPROVED_NETWORK_ID || state.web3.networkId
-    const isConnectedToApprovedNetwork = !!(state.web3.networkId && state.web3.networkId !== '' && state.web3.networkId === approvedNetworkId)
-    const web3Status = {
-      hasWeb3InjectedBrowser,
-      hasCoinbase,
-      isConnectedToApprovedNetwork,
-      coinbase
-    }
-
-    let warningMessage = null
-    if (hasWeb3InjectedBrowser) {
-      if (hasCoinbase) {
-        if (!isConnectedToApprovedNetwork) {
-          warningMessage = `You're not on the same Blockchain as us. Please connect to the ${NETWORKS[approvedNetworkId]}`
-        }
-      } else {
-        warningMessage = "Looks like you haven't logged into your Web3 injector. If you're using Metamask and you'd signed up, please log into Metamask, else click on the 'Sign Up' link above to begin."
-      }
-    } else {
-      warningMessage = 'Your browser is not Web3-enabled.'
-    }
-
-    if (hasWeb3InjectedBrowser && hasCoinbase && isConnectedToApprovedNetwork) {
-      const userCopy = state.user
-      Object.assign(userCopy, web3Status)
-      state.user = userCopy
-    } else {
-      resetUser(state, web3Status)
-    }
-
-    if (payload.callback) payload.callback({ status: !warningMessage, warningMessage })
-  },
   [MUTATION_TYPES.UPDATE_WEB3_PROPERTIES] (state, payload) {
     for (var i = payload.properties.length - 1; i >= 0; i--) {
       state.web3[payload.properties[i]] = payload.values[i]

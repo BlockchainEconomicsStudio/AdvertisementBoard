@@ -96,7 +96,6 @@ export default {
     text-align:center;
   }
    .namecontentclass{
-    //  font-family: ms-yahei;
     font-size:50px;
     background:#fff;
         align-items: center;

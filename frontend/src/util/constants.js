@@ -18,7 +18,6 @@ export const BACKEND_SERVER_ADDRESS = 'http://ec2-52-194-251-95.ap-northeast-1.c
 export const MUTATION_TYPES = {
   CHANGE_CURRENT_ROUTE_TO: 'changeCurrentRouteTo',
   REGISTER_WEB3_INSTANCE: 'registerWeb3Instance',
-  UPDATE_USER_BLOCKCHAIN_STATUS: 'updateUserBlockchainStatus',
   UPDATE_WEB3_PROPERTIES: 'updateWeb3Properties',
   SET_CURRENT_VIEW: 'setCurrentView',
   UPDATE_DAPP_READINESS: 'updateDAppReadiness',

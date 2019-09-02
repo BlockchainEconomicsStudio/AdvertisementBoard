@@ -46,15 +46,6 @@ export default {
   [ACTION_TYPES.UPDATE_WEB3_PROPERTIES] ({ commit }, payload) {
     commit(MUTATION_TYPES.UPDATE_WEB3_PROPERTIES, payload)
   },
-  [ACTION_TYPES.UPDATE_USER_BLOCKCHAIN_STATUS] ({ commit }) {
-    return new Promise(function (resolve, reject) {
-      commit(MUTATION_TYPES.UPDATE_USER_BLOCKCHAIN_STATUS, {
-        callback: (result) => {
-          result.status ? resolve() : reject(result)
-        }
-      })
-    })
-  },
   [ACTION_TYPES.CHANGE_CURRENT_ROUTE_TO] ({ commit }, newRoute) {
     commit(MUTATION_TYPES.CHANGE_CURRENT_ROUTE_TO, newRoute)
   },

@@ -7,6 +7,7 @@ let getWeb3 = new Promise(function (resolve, reject) {
     var web3 = window.web3
 
     if (window.ethereum) {
+      window.ethereum.autoRefreshOnNetworkChange = false
       web3 = new Web3(window.ethereum);
       try {
         // Request account access if needed

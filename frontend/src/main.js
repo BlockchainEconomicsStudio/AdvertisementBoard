@@ -59,18 +59,9 @@ new Vue({
       .then((result) => {
         let state = result.state
         monitorWeb3(state)
-        this.$store.dispatch(ACTION_TYPES.UPDATE_USER_BLOCKCHAIN_STATUS)
-          .then(() => {
-            if (!(this.isDAppReady)) {
-              this.$store.dispatch(ACTION_TYPES.UPDATE_DAPP_READINESS, true)
-            }
-          })
-          .catch(() => {
-            console.log('Unable to UPDATE_USER_BLOCKCHAIN_STATUS')
-            if (!(this.isDAppReady)) {
-              this.$store.dispatch(ACTION_TYPES.UPDATE_DAPP_READINESS, true)
-            }
-          })
+        if (!(this.isDAppReady)) {
+          this.$store.dispatch(ACTION_TYPES.UPDATE_DAPP_READINESS, true)
+        }
       })
       .catch((result = {}) => {
         let state = result.state

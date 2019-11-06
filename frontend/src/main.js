@@ -91,6 +91,12 @@ new Vue({
       });
       window.open(routeUrl.href, '_blank');
     },
+    reloadSiteWithinWindow(adId) {
+      let routeUrl = this.$router.resolve({
+        path: "/ad/" + adId
+      });
+      window.open(routeUrl.href, '_self');
+    },
     buyAdBoard(data) {
       const param = Object.assign({}, {
         state: this.$store.state,
@@ -117,8 +123,8 @@ new Vue({
                 }
                 */
             } else if (SC_EVENTS.BUY == log.event) {
-              let newAdId = log.args[0]
-              this.addHistory(newAdId)
+              //let newAdId = log.args[0]
+              //this.addHistory(newAdId)
               /*
                 "args": {
                     "0": "0",
@@ -173,8 +179,8 @@ new Vue({
                 */
             } else if (SC_EVENTS.CREATE == log.event) {
 
-              let newAdId = log.args[0]
-              this.addHistory(newAdId)
+              //let newAdId = log.args[0]
+              //this.addHistory(newAdId)
               /*
                 "args": {
                   "0": "0",
@@ -213,8 +219,8 @@ new Vue({
           for (var i = 0; i < result.logs.length; i++) {
             let log = result.logs[i]
             if (SC_EVENTS.CHANGE_PRICE == log.event) {
-              let newAdId = log.args[0]
-              this.addHistory(newAdId)
+              //let newAdId = log.args[0]
+              //this.addHistory(newAdId)
             }
           }
         })
@@ -236,8 +242,8 @@ new Vue({
           for (var i = 0; i < result.logs.length; i++) {
             let log = result.logs[i]
             if (SC_EVENTS.CHANGE_CONTENT == log.event) {
-              let newAdId = log.args[0]
-              this.addHistory(newAdId)
+              //let newAdId = log.args[0]
+              //this.addHistory(newAdId)
             }
           }
         })
@@ -258,8 +264,8 @@ new Vue({
           for (var i = 0; i < result.logs.length; i++) {
             let log = result.logs[i]
             if (SC_EVENTS.ADD_DEPOSITE == log.event) {
-              let newAdId = log.args[0]
-              this.addHistory(newAdId)
+              //let newAdId = log.args[0]
+              //this.addHistory(newAdId)
             }
           }
         })
@@ -279,8 +285,8 @@ new Vue({
           for (var i = 0; i < result.logs.length; i++) {
             let log = result.logs[i]
             if (SC_EVENTS.WITHDRAW_DEPOSIT == log.event) {
-              let newAdId = log.args[0]
-              this.addHistory(newAdId)
+              //let newAdId = log.args[0]
+              //this.addHistory(newAdId)
             }
           }
         })
@@ -316,9 +322,15 @@ new Vue({
     async getEthPrice() {
       return await axios.get(CRYPTO_COMPARE_URL);
     },
+    async getAllHistory() {
+      let apiUrl = BACKEND_SERVER_ADDRESS + "/api/get_adv_list";
+      return await axios.post(apiUrl);
+    },
     async getHistory(adId) {
-      let apiUrl = BACKEND_SERVER_ADDRESS + "/api/v1/getAdBoardHistory?ad_id=" + adId;
-      return await axios.get(apiUrl);
+      let apiUrl = BACKEND_SERVER_ADDRESS + "/api/get_adv_one";
+      return await axios.post(apiUrl, {
+        ad_id: adId,
+      })
     },
     async addHistory(adId) {
       let oldAdId = this.$store.state.currentAdBoard.adId;
@@ -337,12 +349,12 @@ new Vue({
         content: adboardData.content,
 
       }
-      /*, {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              "cache-control": "no-cache"
-            }
-          }*/
+      // {
+      //       headers: {
+      //         "Content-Type": "application/x-www-form-urlencoded",
+      //         "cache-control": "no-cache"
+      //       }
+      //     }
       )
         .then(function(response) {
           Vue.prototype.$trans.$emit("operate", "success");

@@ -13,7 +13,7 @@ export const APPROVED_NETWORK_ID = '1' // Default is undefined. Set as you choos
 
 export const CRYPTO_COMPARE_URL = 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD'
 //export const BACKEND_SERVER_ADDRESS = 'http://127.0.0.1:3000'
-export const BACKEND_SERVER_ADDRESS = 'http://ec2-52-194-251-95.ap-northeast-1.compute.amazonaws.com:3000'
+export const BACKEND_SERVER_ADDRESS = 'http://47.75.40.140:3000'
 
 export const MUTATION_TYPES = {
   CHANGE_CURRENT_ROUTE_TO: 'changeCurrentRouteTo',

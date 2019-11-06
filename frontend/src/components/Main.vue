@@ -88,13 +88,19 @@ export default {
       this.dataflat = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
       this.isLogin = (coinbase != null) ? true : false
       if (this.isLogin) {
-        this.getData(this.$route.params.id);
+        this.$root.reloadSiteWithinWindow(this.$route.params.id || 0)
+        this.getData(this.$route.params.id || 0);
         this.autoPrice();
       }
     },
     $route(newRoute) {
       if (newRoute.params.id !== "undefined") {
-        this.$root.reloadSite(newRoute.params.id);
+        if (this.isLogin) {
+          this.getData(newRoute.params.id);
+          this.autoPrice();
+        } else {
+          this.getAllHistory()
+        }
       }
     }
   },
@@ -109,8 +115,14 @@ export default {
       let coinbase = this.$store.state.web3.coinbase;
       this.dataflat = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
       this.isLogin = (coinbase != null) ? true : false
-      if (this.isLogin) {
-        this.getData(this.$store.state.currentAdBoard.adId || 0)
+      if (this.$route.path == "/") {
+        this.getAllHistory()
+      } else {
+        if (this.isLogin) {
+          this.getData(this.$store.state.currentAdBoard.adId || 0)
+        } else {
+          this.getAllHistory()
+        }
       }
 
       this.$trans.$off("operate");
@@ -158,7 +170,17 @@ export default {
       } else {
         this.timeHeld = "0 日";
       }
-    }
+    },
+    getAllHistory: async function() {
+      let result = await this.$root.getAllHistory()
+      this.history = []
+      let resultJson = result.data.resp
+
+      if (resultJson.length > 0) {
+        let recordJson = resultJson[0]
+        this.artName = recordJson.content;
+      }
+    },
   }
 };
 </script>

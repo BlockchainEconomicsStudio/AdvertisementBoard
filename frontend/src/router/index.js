@@ -11,7 +11,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/ad/0'
+      component: Main,
+      meta: { view: Main }
     },
     {
       path: '/ad/:id',

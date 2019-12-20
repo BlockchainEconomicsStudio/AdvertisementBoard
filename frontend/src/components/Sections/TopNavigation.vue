@@ -7,10 +7,10 @@
         <audio id="audio" ref="audio" src="../../../static/music.mp3" preload loop autoplay="true" />
       </div>
     </li>
-    <li>
+    <!-- <li>
       <a target="_blank" href="#">中</a>/
       <a target="_blank" href="#">EN</a>
-    </li>
+    </li> -->
     <li>
       <router-link to="/about">
         关于我们

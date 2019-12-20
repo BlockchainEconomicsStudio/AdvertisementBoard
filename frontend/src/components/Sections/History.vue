@@ -22,7 +22,8 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      history: []
+      history: [],
+      isRequestingHistory:false
     };
   },
   computed: {
@@ -36,12 +37,8 @@ export default {
       this.getHistory(this.$route.params.id || 0);
     },
     $route(newRoute) {
-      if (newRoute.params.id !== "undefined" && this.isLogin) {
-        if (this.isLogin) {
-          this.getHistory(newRoute.params.id)
-        } else {
-          this.getAllHistory()
-        }
+      if (newRoute.params.id !== "undefined") {
+        this.getHistory(newRoute.params.id || 0)
       }
     }
   },
@@ -50,17 +47,18 @@ export default {
     let coinbase = this.$store.state.web3.coinbase
     this.isLogin = (coinbase != null) ? true : false
     if (this.$route.path == "/") {
-      this.getAllHistory()
+      this.getHistory(0);
     } else {
-      if (this.isLogin) {
-        this.getHistory(this.$route.params.id || 0);
-      } else {
-        this.getAllHistory()
-      }
+      this.getHistory(this.$route.params.id || 0);
     }
   },
   methods: {
     getHistory: async function(adId) {
+      if (this.isRequestingHistory) {
+        return;
+      }
+      this.isRequestingHistory = true;
+
       let result = await this.$root.getHistory(adId)
       this.history = []
       let resultJson = result.data.resp
@@ -79,31 +77,9 @@ export default {
 
         this.history.unshift(record)
       }
-    },
-    getAllHistory: async function() {
-      let result = await this.$root.getAllHistory()
-      this.history = []
-      let resultJson = result.data.resp
 
-      for (var i = 0; i < resultJson.length; i++) {
-        let recordJson = resultJson[i]
-        if (recordJson.ad_id != 0) {
-          continue
-        }
-
-        let id = recordJson.id
-        let ad_id = recordJson.ad_id
-        let parent_id = recordJson.parent_id
-        let owner_address = recordJson.owner_address
-        let price = weiToEth(parseInt(recordJson.price, 10));
-        let deposit = weiToEth(parseInt(recordJson.deposit, 10));
-        let last_tax_pay_timestamp = timestampToDataString(parseInt(recordJson.last_tax_pay_timestamp, 10))
-        let content = recordJson.content
-        let record = Object.assign({}, {id, ad_id, parent_id, owner_address, price, deposit, last_tax_pay_timestamp, content})
-        
-        this.history.unshift(record)
-      }
-    },
+      this.isRequestingHistory = false;
+    }
   }
 };
 </script>

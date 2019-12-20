@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import trans from './service/Trans'
 import axios from 'axios';
+import qs from 'qs';
 
 import { mapState, mapActions } from 'vuex'
 import { ACTION_TYPES, SC_EVENTS } from './util/constants'
@@ -322,15 +323,20 @@ new Vue({
     async getEthPrice() {
       return await axios.get(CRYPTO_COMPARE_URL);
     },
-    async getAllHistory() {
-      let apiUrl = BACKEND_SERVER_ADDRESS + "/api/get_adv_list";
-      return await axios.post(apiUrl);
-    },
     async getHistory(adId) {
       let apiUrl = BACKEND_SERVER_ADDRESS + "/api/get_adv_one";
-      return await axios.post(apiUrl, {
-        ad_id: adId,
-      })
+
+      const requestBody = {
+        ad_id: adId
+      }
+      
+      const config = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+      
+      return await axios.post(apiUrl, qs.stringify(requestBody), config)
     },
     async addHistory(adId) {
       let oldAdId = this.$store.state.currentAdBoard.adId;
@@ -349,12 +355,6 @@ new Vue({
         content: adboardData.content,
 
       }
-      // {
-      //       headers: {
-      //         "Content-Type": "application/x-www-form-urlencoded",
-      //         "cache-control": "no-cache"
-      //       }
-      //     }
       )
         .then(function(response) {
           Vue.prototype.$trans.$emit("operate", "success");

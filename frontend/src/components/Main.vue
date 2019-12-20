@@ -75,7 +75,8 @@ export default {
       contenttips: "本广告牌字数限制：24个中文字符/48个字符",
       tips1: "持有者管理广告牌",
       isLogin:false,
-      isOwner:false
+      isOwner:false,
+      isRequestingHistory:false
     };
   },
   computed: {
@@ -99,7 +100,7 @@ export default {
           this.getData(newRoute.params.id);
           this.autoPrice();
         } else {
-          this.getAllHistory()
+          this.getHistory(this.$route.params.id || 0)
         }
       }
     }
@@ -116,12 +117,12 @@ export default {
       this.dataflat = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
       this.isLogin = (coinbase != null) ? true : false
       if (this.$route.path == "/") {
-        this.getAllHistory()
+        this.getHistory(0);
       } else {
         if (this.isLogin) {
           this.getData(this.$store.state.currentAdBoard.adId || 0)
         } else {
-          this.getAllHistory()
+          this.getHistory(this.$route.params.id || 0);
         }
       }
 
@@ -171,16 +172,22 @@ export default {
         this.timeHeld = "0 日";
       }
     },
-    getAllHistory: async function() {
-      let result = await this.$root.getAllHistory()
-      this.history = []
+    getHistory: async function(adId) {
+      if (this.isRequestingHistory) {
+        return;
+      }
+      this.isRequestingHistory = true;
+
+      let result = await this.$root.getHistory(adId)
       let resultJson = result.data.resp
 
       if (resultJson.length > 0) {
         let recordJson = resultJson[0]
         this.artName = recordJson.content;
       }
-    },
+
+      this.isRequestingHistory = false;
+    }
   }
 };
 </script>
